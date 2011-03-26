@@ -1,0 +1,24 @@
+Installing Node:
+
+To run the website, I suggest building a local version of node.  I haven't worked out all of the kinks with a global installation yet.  I followed these instructions:
+
+	git clone https://github.com/joyent/node.git
+	cd node
+	export JOBS=2 # optional, sets number of parallel commands.
+	mkdir ~/local
+	./configure --prefix=$HOME/local/node
+	make
+	make install
+	export PATH=$HOME/local/node/bin:$PATH
+
+Installing npm:
+	curl http://npmjs.org/install.sh | sh
+
+Install dependencies:
+	npm install express
+	npm install mysql
+	npm install ejs
+	npm install yaml
+
+node web/nventio.js &
+
