@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title><%= yield(:title) || "Telegenic" %></title>
+  <%= csrf_meta_tag %>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <%= stylesheet_link_tag 'style' %>
+  <%= stylesheet_link_tag 'base' %>
+  <%= javascript_include_tag "modernizr-1.6.min" %>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/jquery.js"%3E%3C/script%3E'))</script>
+  <%= yield(:head) %>
+
+  <!--
+  <%= javascript_include_tag "plugins" %>
+  <%= javascript_include_tag "script" %>
+  <%= javascript_include_tag "yahoo-profiling.min" %>
+  <%= javascript_include_tag "config" %>
+  -->
+
+</head>
+
+<body>
+
+  <div id="container">
+    <header>
+      <%=link_to "telegenic", :controller => :series, :action => :index %>
+    </header>
+
+    <%=yield(:navigation)%>
+
+    <div id="main" class="clearfix">
+      <%=yield%>
+    </div>
+
+    <footer>
+     <%=link_to "Jeff Gonzalez", "http://twitter.com/likwid", :class => "twitter"%>
+    </footer>
+  </div> <!-- end of #container -->
+
+</body>
+</html>
