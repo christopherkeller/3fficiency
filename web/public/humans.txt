@@ -3,9 +3,7 @@
 
 
 /* TEAM */
-  Jedi Knight: Jeff Gonzalez
-  Site: telegenik.sumnurv.com
-  Twitter: twitter.com/likwid
+  Chris Keller, Jeff Gonzalez, Ryan Spaulding
   Location: San Jose, California
 
 /* SITE */

@@ -19,9 +19,10 @@ app.configure(function() {
 });
 
 app.get('/', function(req, res) {
-	db.query("select * from users", function(err, results, fields) {
-		res.render('index.ejs', { pageTitle: "telegenik", viewData: results } );
+	db.query("select * from user", function(err, results, fields) {
+		res.render('index.ejs', { pageTitle: "nventio", viewData: results } );
 	});
+	//res.render('index.ejs', { pageTitle: "nventio", viewData: null } );
 });
 
 app.listen(8000);
