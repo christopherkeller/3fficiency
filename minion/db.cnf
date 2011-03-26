@@ -1,5 +1,4 @@
-[mysqld]
+[client]
 host=localhost
 user=cnkeller
-[client]
 password=430Scuder!a
