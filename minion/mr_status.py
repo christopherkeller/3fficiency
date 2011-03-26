@@ -9,10 +9,12 @@ __author__  = [ 'Christopher Keller' ]
 __version__ = '0.1'
 
 DB_SCHEMA = 'nventio'
+DB_CONFIG = './db.cnf'
 
 import MySQLdb
 import itertools
 import string
+import sys
 
 def map_reduce(i,mapper,reducer):
 	intermediate = []
@@ -34,7 +36,7 @@ def reducer(intermediate_key,intermediate_value_list):
 
 def connect(user):
 	try:
-		db = MySQLdb.connect(host="localhost",user="cnkeller",passwd="430Scuder!a",db="nventio")
+		db = MySQLdb.connect(db=DB_SCHEMA,read_default_file=DB_CONFIG)
 	except MySQLdb.Error, e:
 		print """Error %d: %s""" % (e.args[0], e.args[1])
 		sys.exit (1)
