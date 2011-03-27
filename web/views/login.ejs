@@ -1,0 +1,12 @@
+<% if (flash.error) { %>
+<div><%=flash.error%></div>
+<% } %>
+
+<form method="post" action="/login" enctype="application/x-www-form-urlencoded" name="commit">
+	<input type="hidden" name="csrf" value="<%=csrf%>"/>
+	<input type="text" id="username" name="username" placeholder="username"/>
+	<br/>
+	<input type="password" id="password" name="password" placeholder="password"/>
+	<br/>
+	<input type="submit" name="commit" value="Login"/>
+</form>

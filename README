@@ -1,6 +1,11 @@
-Installing Node:
+Assumptions:
+I connected to ssh with -L3306:localhost:3306, to port forward to the database located on the host.
 
-To run the website, I suggest building a local version of node.  I haven't worked out all of the kinks with a global installation yet.  I followed these instructions:
+Installing Node:
+To run the website, I suggest building a local version of node.  
+I haven't worked out all of the kinks with a global installation yet.  
+
+I followed these instructions:
 
 	git clone https://github.com/joyent/node.git
 	cd node
@@ -19,6 +24,7 @@ Install dependencies:
 	npm install mysql
 	npm install ejs
 	npm install yaml
+	npm install express-csrf
+	npm install node_hash
 
 node web/nventio.js &
-
