@@ -34,7 +34,12 @@ def mapper(input_key,input_value):
 def reducer(intermediate_key,intermediate_value_list):
 	return (intermediate_key,sum(intermediate_value_list))
 
-def connect(user):
+def returnCount(wordList,term):
+	for word in wordList:
+		if word[0] == term:
+			return "%s occurs %d times" % (word[0],word[1])
+		
+def connect(args):
 	try:
 		db = MySQLdb.connect(db=DB_SCHEMA,read_default_file=DB_CONFIG)
 	except MySQLdb.Error, e:
@@ -43,30 +48,35 @@ def connect(user):
 	c = db.cursor()
 	
 	if (opt.verbose):
-		print """Removing all previous occurences of %s...""" % scan.host
-	c.execute("""SELECT status FROM status WHERE user_id = (SELECT id FROM user WHERE user_name='%s')""" % user)
+		print """SELECT status FROM status WHERE user_id = (SELECT id FROM user WHERE user_name='%s')""" % args[0]
+	c.execute("""SELECT status FROM status WHERE user_id = (SELECT id FROM user WHERE user_name='%s')""" % args[0])
 	result = c.fetchall()
 	i={}
 	count=0
 	for record in result:
 		i[count]=record[0]
 		count = count + 1
-	print sorted(map_reduce(i,mapper,reducer),key=lambda x: x[1],reverse=True)
-		
+
+	if len(args) < 2:
+		print sorted(map_reduce(i,mapper,reducer),key=lambda x: x[1],reverse=True)
+	else:
+		print returnCount(sorted(map_reduce(i,mapper,reducer),key=lambda x: x[1],reverse=True),args[1])
+
+			
 def main(opt,args):
 	"""The main() function that contains our use cases."""
-	connect(args[0])
+	connect(args)
 
 if __name__ == "__main__":
-	"""Parse command line options; default option is all encompassing sudoers file"""
+	"""Parse command line options"""
 	from optparse import OptionParser, make_option
 	option_list = [
 		make_option("-v", dest="verbose", help="verbose output",action="store_true"),
-		make_option("-q", dest="verbose", help="no output",action="store_false"),
 		make_option("-u", dest="infile", help="input nbe file to parse", action="store", type="string"),
 		]
-
-	usage  = """usage: %prog [options] -f FILENAME"""
+	usage = """usage: %prog [options] username term"""
 	parser = OptionParser(usage,option_list=option_list)
-	opt, args = parser.parse_args()
+	(opt, args) = parser.parse_args()
+	if len(args) < 1:
+		parser.error("incorrect number of arguments")
 	main(opt,args)
