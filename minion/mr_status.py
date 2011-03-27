@@ -3,8 +3,6 @@
 # C.Keller - 03/26/2011
 #
 #
-
-
 __author__  = [ 'Christopher Keller' ]
 __version__ = '0.1'
 
@@ -48,8 +46,11 @@ def connect(args):
 	c = db.cursor()
 	
 	if (opt.verbose):
-		print """SELECT status FROM status WHERE user_id = (SELECT id FROM user WHERE user_name='%s')""" % args[0]
-	c.execute("""SELECT status FROM status WHERE user_id = (SELECT id FROM user WHERE user_name='%s')""" % args[0])
+		print """SELECT completed_status FROM status WHERE user_id = (SELECT id FROM user WHERE user_name='%s')""" % args[0]
+	if args[0] == "all":
+		c.execute("""SELECT completed_status FROM status""")
+	else:
+		c.execute("""SELECT completed_status FROM status WHERE user_id = (SELECT id FROM user WHERE user_name='%s')""" % args[0])
 	result = c.fetchall()
 	i={}
 	count=0
