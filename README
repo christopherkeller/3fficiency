@@ -19,12 +19,11 @@ I followed these instructions:
 Installing npm:
 	curl http://npmjs.org/install.sh | sh
 
-Install dependencies:
-	npm install express
-	npm install mysql
-	npm install ejs
-	npm install yaml
-	npm install express-csrf
-	npm install node_hash
+Dependencies:
+I have reworked the way we handle dependencies.  There is now a package.json file in the root of the website.  I have moved all of the actual server code to the lib folder.  This seems to be how other people are organizing their code.
 
-node web/nventio.js &
+The main benefit of this method is that we can enter dependencies into the package.json file and then run `npm bundle` to have to pull down local versions of the dependencies for our application to use.
+
+In theory, you just need to cd into the web directory and then perform npm update && npm bundle commands.
+
+node nventio.js &

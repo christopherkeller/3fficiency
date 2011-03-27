@@ -1,0 +1,28 @@
+{
+	"name" : "3fficiency-web",
+	"version" : "0.0.3",
+	"description" : "3fficiency website",
+	"maintainers": [
+		{
+			"name":"Christopher Keller",
+			"email":"christopher@3fficiency.com"
+		}, {
+			"name":"Jeff Gonzalez",
+			"email":"jeff@3fficiency.com"
+		}, {
+			"name":"Ryan Spaulding",
+			"email":"ryan@3fficiency.com"
+		}
+	],
+	"directories" : { "lib" : "./lib" },
+	"main" : "./lib/nventio",
+	"dependencies" : {
+		"connect" : ">=1.1.5",
+		"ejs" : ">=0.3.1",
+		"express" : ">=2.1.0",
+		"express-csrf" : ">=0.2.0",
+		"mysql" : ">=0.9.1",
+		"node_hash" : ">=0.1.0",
+		"yaml" : ">=0.1.1"		
+	}
+}
