@@ -36,14 +36,17 @@ def returnCount(wordList,term):
 	for word in wordList:
 		if word[0] == term:
 			return "%s occurs %d times" % (word[0],word[1])
-		
-def connect(args):
+			
+def connectDB():
 	try:
-		db = MySQLdb.connect(db=DB_SCHEMA,read_default_file=DB_CONFIG)
+		db = MySQLdb.connect(read_default_file=DB_CONFIG)
 	except MySQLdb.Error, e:
 		print """Error %d: %s""" % (e.args[0], e.args[1])
 		sys.exit (1)
-	c = db.cursor()
+	return db.cursor()
+		
+def process(args):
+	c = connectDB()
 	
 	if (opt.verbose):
 		print """SELECT completed_status FROM status WHERE user_id = (SELECT id FROM user WHERE user_name='%s')""" % args[0]
@@ -66,7 +69,7 @@ def connect(args):
 			
 def main(opt,args):
 	"""The main() function that contains our use cases."""
-	connect(args)
+	process(args)
 
 if __name__ == "__main__":
 	"""Parse command line options"""
