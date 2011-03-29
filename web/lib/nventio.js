@@ -1,14 +1,21 @@
 //Setup namespaces and imports
 var express = require('express');
+var path = require('path');
+var fs = require('fs');
+var yaml = require('yaml');
 var app = express.createServer();
 var Client = require('mysql').Client, db = new Client();
 var MemoryStore = require('connect').session.MemoryStore;
-var csrf = require('express-csrf');  		//npm install express-csrf
-var hash = require('node_hash');		//npm install node_hash
+var csrf = require('express-csrf');
+
+require.paths.unshift('.');
+var utils = require('utility');
+
+console.log(utils.hash('this is a string', 'sha1'));
 
 //Read our database connection from yaml and establish connection
-var path = './database.yml', fs = require('fs'), yaml = require('yaml');
-var config = yaml.eval(fs.readFileSync(path).toString());
+var dbFile = path.join(path.dirname(__filename),'database.yml')
+var config = yaml.eval(fs.readFileSync(dbFile).toString());
 db.host = config.development.host;
 db.user = config.development.user;
 db.password = config.development.password;
@@ -39,6 +46,7 @@ app.configure(function() {
 		secret: 'string'
 		, store: new MemoryStore( {reapInterval: 60000 * 10} ) 
 	}));
+
 	app.use(express.methodOverride());
 	app.use(express.bodyParser());
 	app.use(app.router);
@@ -60,24 +68,32 @@ app.get('/login', function(req, res) {
 		res.redirect('/');
 	}
 
-	res.render('login.ejs', { pageTitle: 'login' });
+	res.render('login.ejs', { pageTitle: 'login', action: req.url  });
 });
 
 app.post('/login', function(req, res) {
+	console.log(req.url);
 	//TODO: Refactor this query shit out into a class or something
-	var q = "select id, first_name, last_name, user_name, group_id from user where user_name     = ? limit 1";
+	var q =  "select id, first_name, last_name, user_name, group_id, password_salt,"
+	q += "password_hash from user where user_name = ? limit 1";
 	params = req.body;
 	//Get the user from the database based on username
 	db.query(q, [params.username], function(err, results, fields) {
 		if (err || results.length == 0) {
-			//Flash on error
+			//Flash on error, don't authenticate
 			req.flash('error', 'A problem occured while logging in.');
 			res.redirect('/login');
 		} else {
-			//TODO: Get the password hash, salt from database
-			//TODO: Hash the given password and compare with db
-			//TODO: If everything is good, consider the user authenticated
-			console.log("Results:" + results);
+			var salted_pass = results[0].password_salt + params.password;
+			var hashed_password = utils.hash(salted_pass, 'sha1');
+			if (hashed_password == results[0].password_hash) {
+				var url = require('url').parse(req.url, true);
+				req.session.user = results[0];
+				res.redirect(url.query.redirectUrl);
+			} else {
+				req.flash('error', 'A problem occured while logging in.');
+				res.redirect('/login');
+			}
 		}
 	});
 });
@@ -87,9 +103,12 @@ app.post('/login', function(req, res) {
 //ROUTE: ROOT '/' (GET)
 //##
 app.get('/', function(req, res) {
+	//TODO: We need a way to do precondition filters.  I don't want to have to write
+	// 	the logic for this each time.
 	if (!req.session.user) { 
-		res.redirect('/login');
+		res.redirect('/login?redirectUrl=' + unescape('/'));
 	} else {
+		console.log(req.session.user);
 		db.query("select * from user", function(err, results, fields) {
 			res.render('index.ejs', { pageTitle: "nventio", viewData: results } );
 		});
