@@ -1,0 +1,21 @@
+search statuses
+	search on word(s)
+	tagging status for matrix management (in the case you work for two managers simultaneously and each can see status that might apply to them)
+	rollup status by a user defined period of time
+	viewing status tree structure on down
+		can status trees have a visibility to peers and not just children
+	
+histogram
+	most used words via map/reduce
+	trends from week to week or in a period
+	
+groups
+	organizational layout
+
+
+Other projects
+--
+Information sharing via web page
+	replay logs
+	
+Meeting planner
