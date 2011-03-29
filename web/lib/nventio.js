@@ -115,6 +115,51 @@ app.get('/', function(req, res) {
 	}
 });
 
+//##
+//ROUTE: ROOT '/status' (GET)
+//##
+app.get('/status', function(req, res) {
+	if (!req.session.user) { 
+		res.redirect('/login?redirectUrl=' + unescape('/status'));
+	} else {
+		var user_id = req.session.user.id;
+                var get_current_status = "select * from status where user_id = " + user_id + " ORDER BY id DESC LIMIT 1";
+                var get_user_info = "SELECT * FROM user WHERE user_id = " + user_id;
+                console.log("get_current_status: " + get_current_status);
+                db.query(get_current_status, function(err, results, fields) {
+                        console.log(results);
+                        var userStatus = results;
+                        db.query(get_user_info, function(err, results, fields) {
+                                res.render('status.ejs', { pageTitle: "status", userStatus: userStatus, userInfo: results } );
+                        });
+                });
+        }
+});
+
+//##
+//ROUTE: ROOT '/status' (POST)
+//##
+app.post('/status', function(req, res) {
+	if (!req.session.user) {
+                res.redirect('/login?redirectUrl=' + unescape('/status'));
+        } else {
+      		console.log(req.body.user_status);
+        	var new_status = "INSERT INTO status (user_id, date, completed_status, predicted_status) VALUES (" + req.body.user_status.user_id + ", NOW(), '" + req.body.user_status.completed_status + "', '" + req.body.user_status.predicted_status + "')";
+        	console.log("Insert: " + new_status);
+        	db.query(new_status, function(err, results, fields) {
+                	if (err) {
+                        	req.flash('error', "status not updated");
+                        	res.redirect('/status');
+                	} else {
+                        	req.flash('success', "status updated");
+                        	res.redirect('/status');
+                	}
+        	});
+	}
+
+});
+
+
 //Start the web server
 app.listen(8000);
 console.log("Starting server on 0.0.0.0:8000...");
