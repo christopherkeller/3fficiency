@@ -8,6 +8,7 @@
 	<% if (userStatus.length == 0) { %>	
 		<form method="post" action="/status">
 		<input type="hidden" name="user_status[user_id]" value="<%= current_user.id %>" />
+		<input type="hidden" name="csrf" value="<%=csrf%>"/>
 		<h1>Hi <%= current_user.first_name%> <%= current_user.last_name%>,</h1>
 		<p>
 		<strong>What do you want to do next week?</strong><br />
@@ -23,6 +24,7 @@
 	<% } else { %>
 		<form method="post" action="/status">
 		<input type="hidden" name="user_status[user_id]" value="<%= userStatus[0].user_id %>" />
+		<input type="hidden" name="csrf" value="<%=csrf%>"/>
 		<h1>Hi <%= current_user.first_name%> <%= current_user.last_name%>,</h1>
 		<p>Last week (<%= userStatus[0].date %>) you said you'd like to <br /> <em>"<%= userStatus[0].predicted_status %>"</em>.<br /> <strong>Did this get done?</strong>
 		</p>
