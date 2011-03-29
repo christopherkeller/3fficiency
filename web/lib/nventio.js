@@ -161,5 +161,6 @@ app.post('/status', function(req, res) {
 
 
 //Start the web server
+console.log("{0} is cool".format("Jeff"));
 app.listen(8000);
 console.log("Starting server on 0.0.0.0:8000...");

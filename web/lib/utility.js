@@ -2,6 +2,15 @@ var crypto = require('crypto')
 	, path = require('path')
 	, fs = require('fs');
 
+exports.formatString = function(str) {
+	for(var i=1;i<arguments.length;i++)
+	{
+		var exp = new RegExp('\\{' + (i-1) + '\\}','gm');
+		arguments[0] = arguments[0].replace(exp,arguments[i]);
+	}
+	return arguments[0];
+}
+
 exports.hash = function(str, hashType, encoding) {
 	return crypto
 		.createHash(hashType)
