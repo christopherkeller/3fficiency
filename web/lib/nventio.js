@@ -159,8 +159,25 @@ app.post('/status', function(req, res) {
 
 });
 
+//get a specific status from the database 
+//##
+//ROUTE: ROOT '/status/:id' (GET)
+//##
+app.get('/status/:id', function(req, res) {
+	if (!req.session.user) { 
+		res.redirect('/login?redirectUrl=' + unescape('/status'));
+	} else {
+		var user_id = req.session.user.id;
+		// note this is allowing anyone in the system to see this...
+		var get_selected_status = "SELECT s.id, first_name, last_name, date, completed_status, predicted_status  FROM status AS s JOIN user AS u ON (user_id = u.id) WHERE s.id = " + req.params.id; 
+                db.query(get_selected_status, function(err, results, fields) {
+                	res.render('single_status.ejs', { pageTitle: "status", statusInfo: results } );
+                });
+        }
+});
+
 
 //Start the web server
-console.log("{0} is cool".format("Jeff"));
+//console.log("{0} is cool".format("Jeff"));
 app.listen(8000);
 console.log("Starting server on 0.0.0.0:8000...");
