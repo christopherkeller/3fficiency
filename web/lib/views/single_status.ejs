@@ -13,11 +13,11 @@
 		The status id you selected was not in the database.
 	</p>
 <% } else { %>
-	<h1>Status : <%= statusInfo.id %> </h1>
+	<h1>Status : <%= statusInfo[0].id %> </h1>
 
 	<h2>Author:</h2>
 	<p>
-		<%= statusInfo.first_name %> <%= statusInfo.last_name %>
+		<%= statusInfo[0].first_name %> <%= statusInfo[0].last_name %>
 	</p>
 	<h2>Date:</h2>
 	<p>

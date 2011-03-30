@@ -165,13 +165,32 @@ app.post('/status', function(req, res) {
 //##
 app.get('/status/:id', function(req, res) {
 	if (!req.session.user) { 
-		res.redirect('/login?redirectUrl=' + unescape('/status'));
+		var redirect_string = '/status/' +  req.params.id;
+		res.redirect('/login?redirectUrl=' + unescape(redirect_string));
 	} else {
 		var user_id = req.session.user.id;
 		// note this is allowing anyone in the system to see this...
-		var get_selected_status = "SELECT s.id, first_name, last_name, date, completed_status, predicted_status  FROM status AS s JOIN user AS u ON (user_id = u.id) WHERE s.id = " + req.params.id; 
+		var get_selected_status = "SELECT s.id as id, first_name, last_name, date, completed_status, predicted_status  FROM status AS s JOIN user AS u ON (user_id = u.id) WHERE s.id = " + req.params.id; 
                 db.query(get_selected_status, function(err, results, fields) {
                 	res.render('single_status.ejs', { pageTitle: "status", statusInfo: results } );
+                });
+        }
+});
+
+//get all the status about a specific user
+//##
+//ROUTE: ROOT '/status/user/:id' (GET)
+//##
+app.get('/status/user/:id', function(req, res) {
+	if (!req.session.user) { 
+		var redirect_string = '/status/user/' +  req.params.id;
+		res.redirect('/login?redirectUrl=' + unescape(redirect_string));
+	} else {
+		var user_id = req.session.user.id;
+		// note this is allowing anyone in the system to see this...
+		var get_selected_status = "SELECT s.id as id, first_name, last_name, date, completed_status, predicted_status  FROM status AS s JOIN user AS u ON (user_id = u.id) WHERE user_id = " + req.params.id; 
+                db.query(get_selected_status, function(err, results, fields) {
+                	res.render('user_status.ejs', { pageTitle: "status", statusInfo: results } );
                 });
         }
 });
