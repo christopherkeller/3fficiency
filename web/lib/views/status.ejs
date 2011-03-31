@@ -1,0 +1,44 @@
+<% if (flash.error) { %>
+<div><%=flash.error%></div>
+<% } %>
+<% if (flash.success) { %>
+<div><%=flash.success%></div>
+<% } %>
+	<% if (userStatus.length == 0) { %>	
+		<form method="post" action="/status">
+		<input type="hidden" name="user_status[user_id]" value="<%= current_user.id %>" />
+		<input type="hidden" name="csrf" value="<%=csrf%>"/>
+		<h1>Hi <%= current_user.first_name%> <%= current_user.last_name%>,</h1>
+		<p>
+		<strong>What do you want to do next week?</strong><br />
+		<p>
+		<p>
+		<textarea name="user_status[predicted_status]" id="predicted_status"></textarea>	
+		</p>	
+		
+		<input type="reset" name="reset" id="reset" value="Reset Form" />
+		<input type="submit" name="submit" id="submit" value="Submit Status" />
+		</form>
+		
+	<% } else { %>
+		<form method="post" action="/status">
+		<input type="hidden" name="user_status[user_id]" value="<%= userStatus[0].user_id %>" />
+		<input type="hidden" name="csrf" value="<%=csrf%>"/>
+		<h1>Hi <%= current_user.first_name%> <%= current_user.last_name%>,</h1>
+		<% var pretty_date = new Date(userStatus[0].date) %>
+		<p>Last week (<%= pretty_date.getMonth() + 1  %>/<%= pretty_date.getDate() %>/<%=pretty_date.getFullYear() %>) you said you'd like to <br /> <em>"<%= userStatus[0].predicted_status %>"</em>.<br /> <strong>Did this get done?</strong>
+		</p>
+		<p>
+		<textarea name="user_status[completed_status]" id="completed_status"></textarea>	
+		</p>
+		<p>
+		<strong>What do you want to do next week?</strong><br />
+		<p>
+		<p>
+		<textarea name="user_status[predicted_status]" id="predicted_status"></textarea>	
+		</p>	
+		<input type="reset" name="reset" id="reset" value="Reset Form" />
+		<input type="submit" name="submit" id="submit" value="Submit Status" />
+		
+		</form>	
+	<% } %>

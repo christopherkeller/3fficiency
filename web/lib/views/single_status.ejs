@@ -1,0 +1,35 @@
+<% if (flash.error) { %>
+<div><%=flash.error%></div>
+<% } %>
+<% if (flash.success) { %>
+<div><%=flash.success%></div>
+<% } %>
+
+
+<% if (statusInfo.length == 0) { %>	
+
+	<h1>Status not in the database</h1>
+	<p>
+		The status id you selected was not in the database.
+	</p>
+<% } else { %>
+	<h1>Status : <%= statusInfo[0].id %> </h1>
+
+	<h2>Author:</h2>
+	<p>
+		<%= statusInfo[0].first_name %> <%= statusInfo[0].last_name %>
+	</p>
+	<h2>Date:</h2>
+	<p>
+		<% var pretty_date = new Date(statusInfo[0].date) %>
+		<%= pretty_date.getMonth() + 1  %>/<%= pretty_date.getDate() %>/<%=pretty_date.getFullYear() %>
+	</p>
+	<h2>Completed Status:</h2>
+	<p>
+		<%= statusInfo[0].completed_status %>
+	</p>
+	<h2>Predicted Status:</h2>
+	<p>
+		<%= statusInfo[0].predicted_status %>
+	</p>
+<% } %>
