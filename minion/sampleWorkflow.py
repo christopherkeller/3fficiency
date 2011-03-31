@@ -6,7 +6,6 @@
 __author__  = [ 'Christopher Keller' ]
 __version__ = '0.1'
 
-DB_SCHEMA = 'nventio'
 DB_CONFIG = './db.cnf'
 
 import MySQLdb
@@ -51,9 +50,10 @@ def askStatus(username):
 	nextWeek = raw_input()
 	SQL = """INSERT INTO status(user_id,date,completed_status,predicted_status) VALUES (1,CURDATE(),%s,%s)""" 
 	c.execute(SQL,(lastWeek,nextWeek))
+
 def connectDB():
 	try:
-		db = MySQLdb.connect(db=DB_SCHEMA,read_default_file=DB_CONFIG)
+		db = MySQLdb.connect(read_default_file=DB_CONFIG)
 	except MySQLdb.Error, e:
 		print """Error %d: %s""" % (e.args[0], e.args[1])
 		sys.exit (1)
