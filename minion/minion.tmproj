@@ -3,9 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>mr_status.py</string>
+	<string>../features</string>
 	<key>documents</key>
 	<array>
+		<dict>
+			<key>filename</key>
+			<string>../features</string>
+			<key>lastUsed</key>
+			<date>2011-03-31T01:21:06Z</date>
+		</dict>
 		<dict>
 			<key>filename</key>
 			<string>mapreduce.py</string>
@@ -14,23 +20,15 @@
 		</dict>
 		<dict>
 			<key>filename</key>
-			<string>../features</string>
-			<key>lastUsed</key>
-			<date>2011-03-29T02:02:24Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>mr_status.py</string>
-			<key>lastUsed</key>
-			<date>2011-03-31T01:06:35Z</date>
-			<key>selected</key>
-			<true/>
+			<string>histogram.py</string>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>sampleWorkflow.py</string>
 			<key>lastUsed</key>
 			<date>2011-03-31T00:05:14Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
@@ -65,20 +63,6 @@
 			<key>firstVisibleLine</key>
 			<integer>1</integer>
 		</dict>
-		<key>mr_status.py</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>18</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>26</integer>
-		</dict>
 		<key>sampleWorkflow.py</key>
 		<dict>
 			<key>caret</key>
@@ -96,7 +80,6 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>mr_status.py</string>
 		<string>mapreduce.py</string>
 		<string>sampleWorkflow.py</string>
 		<string>../features</string>
