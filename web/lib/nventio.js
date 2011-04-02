@@ -109,9 +109,9 @@ app.get('/', function(req, res) {
 	if (!req.session.user) { 
 		res.redirect('/login?redirectUrl=' + unescape('/'));
 	} else {
-		console.log(req.session.user);
-		db.query("select * from user", function(err, results, fields) {
-			res.render('index.ejs', { pageTitle: "nventio", viewData: results } );
+		var get_groups = "SELECT group_name FROM groups AS g JOIN membership AS m ON (g.id = m.group_id) JOIN user AS u ON (m.user_id = u.id) WHERE u.id = " + req.session.user.id;
+		db.query(get_groups, function(err, results, fields) {
+			res.render('index.ejs', { pageTitle: "nventio", groupData: results } );
 		});
 	}
 });
