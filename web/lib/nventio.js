@@ -171,7 +171,7 @@ app.get('/status/:id', function(req, res) {
 	} else {
 		var user_id = req.session.user.id;
 		// note this is allowing anyone in the system to see this...
-		var get_selected_status = "SELECT s.id as id, first_name, last_name, date, completed_status, predicted_status  FROM status AS s JOIN user AS u ON (user_id = u.id) WHERE s.id = " + req.params.id; 
+		var get_selected_status = "SELECT s.id as id, first_name, last_name, date, completed_status, predicted_status  FROM status AS s JOIN user AS u ON (user_id = u.id) WHERE s.id = " + req.params.id + " AND group_id IN (select group_id from membership where user_id = " + req.session.user.id+ ")"; 
                 db.query(get_selected_status, function(err, results, fields) {
                 	res.render('single_status.ejs', { pageTitle: "status", statusInfo: results } );
                 });
