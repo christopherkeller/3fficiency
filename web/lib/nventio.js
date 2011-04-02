@@ -32,6 +32,7 @@ app.dynamicHelpers({
 	current_user: function(req) {
 		return req.session.user;
 	}
+
 });
 
 //Configure the various middleware functionality, view directory and routing.
@@ -74,7 +75,7 @@ app.get('/login', function(req, res) {
 app.post('/login', function(req, res) {
 	console.log(req.url);
 	//TODO: Refactor this query shit out into a class or something
-	var q =  "select id, first_name, last_name, user_name, group_id, password_salt,"
+	var q =  "select id, first_name, last_name, user_name, password_salt,"
 	q += "password_hash from user where user_name = ? limit 1";
 	params = req.body;
 	//Get the user from the database based on username
@@ -190,7 +191,8 @@ app.get('/status/user/:id', function(req, res) {
 		// note this is allowing anyone in the system to see this...
 		var get_selected_status = "SELECT s.id as id, first_name, last_name, date, completed_status, predicted_status  FROM status AS s JOIN user AS u ON (user_id = u.id) WHERE user_id = " + req.params.id; 
                 db.query(get_selected_status, function(err, results, fields) {
-                	res.render('user_status.ejs', { pageTitle: "status", statusInfo: results } );
+			var sortedStatusHash = utils.getStatusHash(results);
+                	res.render('user_status.ejs', { pageTitle: "status", statusInfo: sortedStatusHash } );
                 });
         }
 });

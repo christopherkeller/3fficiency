@@ -6,26 +6,35 @@
 <% } %>
 
 
-<% if (statusInfo.length == 0) { %>	
 
-	<h1><%= statusInfo[0].first_name %> <%= statusInfo[0].last_name %> currently has no statuses in the database</h1>
+<% if (statusInfo.hasStatus) { %>	
 
-<% } else { %>
-	<h1><%= statusInfo[0].first_name %> <%= statusInfo[0].last_name %> Statuses</h1>
-
-	<% statusInfo.forEach(function(item) { %>
-		<h2>Date:</h2>
-		<p>
-			<% var pretty_date = new Date(item.date) %>
-			<%= pretty_date.getMonth() + 1  %>/<%= pretty_date.getDate() %>/<%=pretty_date.getFullYear() %>
-		</p>
-		<h2>Completed Status:</h2>
-		<p>
-			<%= item.completed_status %>
-		</p>
-		<h2>Predicted Status:</h2>
-		<p>
-			<%= item.predicted_status %>
-		</p>
+	<ul>
+	<% statusInfo.keys.forEach(function(item) { %>
+		<li>
+			<strong><%= item %></strong>
+			<ul>
+				<li>
+					<strong>Predicted Status</strong>
+					<ul>	
+						<% statusInfo[item].forEach(function(single_status) { %>
+							<li><%= single_status['predicted_status'] %></li>
+						<% }) %>
+					</ul>
+				</li>
+				<li>
+					<strong>Completed Status</strong>
+					<ul>	
+						<% statusInfo[item].forEach(function(single_status) { %>
+							<li><%= single_status['completed_status'] %></li>
+						<% }) %>
+					</ul>
+				</li>
+			</ul>
+		</li>
 	<% }) %>
+	<ul>
+<% } else { %>
+
+	foo
 <% } %>
