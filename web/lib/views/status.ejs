@@ -11,7 +11,17 @@
 		<h1>Hi <%= current_user.first_name%> <%= current_user.last_name%>,</h1>
 		<p>
 		<strong>What do you want to do next week?</strong><br />
+		</p>
 		<p>
+			Status for the 
+			<select name="user_status[group_id]" id="group">
+			<% groupsInfo.forEach(function(item) { %>
+				<option value="<%= item.id %>"><%= item.group_name %></option>
+
+			<% }) %>
+			</select>
+			group
+		</p>
 		<p>
 		<textarea name="user_status[predicted_status]" id="predicted_status"></textarea>	
 		</p>	
@@ -25,6 +35,16 @@
 		<input type="hidden" name="user_status[user_id]" value="<%= userStatus[0].user_id %>" />
 		<input type="hidden" name="csrf" value="<%=csrf%>"/>
 		<h1>Hi <%= current_user.first_name%> <%= current_user.last_name%>,</h1>
+		<p>
+			Status for the 
+			<select name="user_status[group_id]" id="group">
+			<% groupsInfo.forEach(function(item) { %>
+				<option value="<%= item.id %>"><%= item.group_name %></option>
+
+			<% }) %>
+			</select>
+			group
+		</p>
 		<% var pretty_date = new Date(userStatus[0].date) %>
 		<p>Last week (<%= pretty_date.getMonth() + 1  %>/<%= pretty_date.getDate() %>/<%=pretty_date.getFullYear() %>) you said you'd like to <br /> <em>"<%= userStatus[0].predicted_status %>"</em>.<br /> <strong>Did this get done?</strong>
 		</p>
@@ -33,7 +53,7 @@
 		</p>
 		<p>
 		<strong>What do you want to do next week?</strong><br />
-		<p>
+		</p>
 		<p>
 		<textarea name="user_status[predicted_status]" id="predicted_status"></textarea>	
 		</p>	
