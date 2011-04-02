@@ -1,7 +1,14 @@
+<h2>Your Groups</h2>
 <ul>
-	<%viewData.forEach(function(item) { %>
-	<li>
-		<%=item.user_name%> (<%=item.first_name%> <%=item.last_name%>)
-	</li>
-	<%})%>
+	<% groupData.forEach(function(group) { %>
+		<li><%= group.group_name %></li>
+	
+	<% }) %>
 </ul>
+
+<hr />
+<ul>
+	<li><a href="/status">Give Status</a></li>
+	<li><a href="/status/user/<%= current_user.id %>">View Your Status</a></li>
+</ul>
+

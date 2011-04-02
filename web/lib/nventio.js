@@ -109,9 +109,9 @@ app.get('/', function(req, res) {
 	if (!req.session.user) { 
 		res.redirect('/login?redirectUrl=' + unescape('/'));
 	} else {
-		console.log(req.session.user);
-		db.query("select * from user", function(err, results, fields) {
-			res.render('index.ejs', { pageTitle: "nventio", viewData: results } );
+		var get_groups = "SELECT group_name FROM groups AS g JOIN membership AS m ON (g.id = m.group_id) JOIN user AS u ON (m.user_id = u.id) WHERE u.id = " + req.session.user.id;
+		db.query(get_groups, function(err, results, fields) {
+			res.render('index.ejs', { pageTitle: "nventio", groupData: results } );
 		});
 	}
 });
@@ -126,13 +126,17 @@ app.get('/status', function(req, res) {
 		var user_id = req.session.user.id;
                 var get_current_status = "select * from status where user_id = " + user_id + " ORDER BY id DESC LIMIT 1";
                 var get_user_info = "SELECT * FROM user WHERE user_id = " + user_id;
+		var get_groups_info = "SELECT group_name, g.id FROM groups AS g JOIN membership AS m ON (g.id = m.group_id) JOIN user AS u ON (m.user_id = u.id) WHERE u.id = " + user_id;
                 console.log("get_current_status: " + get_current_status);
                 db.query(get_current_status, function(err, results, fields) {
                         console.log(results);
                         var userStatus = results;
-                        db.query(get_user_info, function(err, results, fields) {
-                                res.render('status.ejs', { pageTitle: "status", userStatus: userStatus, userInfo: results } );
-                        });
+			db.query(get_groups_info, function(err, results, fields) {
+				var groups_info = results;
+                        	db.query(get_user_info, function(err, results, fields) {
+                                	res.render('status.ejs', { pageTitle: "status", userStatus: userStatus, groupsInfo: groups_info, userInfo: results } );
+                        	});
+                       	});
                 });
         }
 });
@@ -145,7 +149,7 @@ app.post('/status', function(req, res) {
                 res.redirect('/login?redirectUrl=' + unescape('/status'));
         } else {
       		console.log(req.body.user_status);
-        	var new_status = "INSERT INTO status (user_id, date, completed_status, predicted_status) VALUES (" + req.body.user_status.user_id + ", NOW(), '" + req.body.user_status.completed_status + "', '" + req.body.user_status.predicted_status + "')";
+        	var new_status = "INSERT INTO status (user_id, date, group_id, completed_status, predicted_status) VALUES (" + req.body.user_status.user_id + ", NOW(), " + req.body.user_status.group_id + ", '" + req.body.user_status.completed_status + "', '" + req.body.user_status.predicted_status + "')";
         	console.log("Insert: " + new_status);
         	db.query(new_status, function(err, results, fields) {
                 	if (err) {
@@ -171,7 +175,7 @@ app.get('/status/:id', function(req, res) {
 	} else {
 		var user_id = req.session.user.id;
 		// note this is allowing anyone in the system to see this...
-		var get_selected_status = "SELECT s.id as id, first_name, last_name, date, completed_status, predicted_status  FROM status AS s JOIN user AS u ON (user_id = u.id) WHERE s.id = " + req.params.id; 
+		var get_selected_status = "SELECT s.id as id, first_name, last_name, date, completed_status, predicted_status  FROM status AS s JOIN user AS u ON (user_id = u.id) WHERE s.id = " + req.params.id + " AND group_id IN (select group_id from membership where user_id = " + req.session.user.id+ ")"; 
                 db.query(get_selected_status, function(err, results, fields) {
                 	res.render('single_status.ejs', { pageTitle: "status", statusInfo: results } );
                 });
