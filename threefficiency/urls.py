@@ -5,6 +5,10 @@ from django.conf.urls.defaults import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+	(r'^$', 'status.views.index'),
+  	(r'^status/$', 'status.views.status'),
+  	(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+  	(r'^accounts/logout/$','django.contrib.auth.views.logout_then_login'),
     # Examples:
     # url(r'^$', 'threefficiency.views.home', name='home'),
     # url(r'^threefficiency/', include('threefficiency.foo.urls')),

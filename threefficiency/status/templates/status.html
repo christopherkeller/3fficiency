@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% block content %}
+{% if user_status|length == 0  %}
+No status found
+{% else %}
+	<h1>Hi {{ user.first_name }} {{ user.last_name }}<h1>
+	<p>
+		Status for the
+		
+	</p>
+{% endif %}
+{% endblock %}

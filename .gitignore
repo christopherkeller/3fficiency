@@ -2,3 +2,4 @@ database.yml
 node_modules/
 tmp/*
 .*.swp
+*.pyc
