@@ -109,7 +109,7 @@ app.get('/', function(req, res) {
 	if (!req.session.user) { 
 		res.redirect('/login?redirectUrl=' + unescape('/'));
 	} else {
-		var get_groups = "SELECT group_name FROM groups AS g JOIN membership AS m ON (g.id = m.group_id) JOIN user AS u ON (m.user_id = u.id) WHERE u.id = " + req.session.user.id;
+		var get_groups = "SELECT group_name, u.id, first_name, last_name FROM user AS u JOIN membership AS m ON (u.id = m.user_id) JOIN groups AS g ON (m.group_id = g.id) WHERE group_id IN (SELECT g.id AS group_id FROM groups AS g JOIN membership AS m ON (g.id = m.group_id) JOIN user AS u ON (m.user_id = u.id) WHERE u.id = " + req.session.user.id + ") AND u.id != " + req.session.user.id;
 		db.query(get_groups, function(err, results, fields) {
 			res.render('index.ejs', { pageTitle: "nventio", groupData: results } );
 		});
