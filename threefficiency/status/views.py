@@ -1,5 +1,4 @@
-# Create your views here.
-from threefficiency.models import User, Status, Role, Group, Membership
+from threefficiency.status.models import User, Status, Role, Group, Membership
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
