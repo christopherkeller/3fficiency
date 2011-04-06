@@ -1,0 +1,29 @@
+Assumptions:
+I connected to ssh with -L3306:localhost:3306, to port forward to the database located on the host.
+
+Installing Node:
+To run the website, I suggest building a local version of node.  
+I haven't worked out all of the kinks with a global installation yet.  
+
+I followed these instructions:
+
+	git clone https://github.com/joyent/node.git
+	cd node
+	export JOBS=2 # optional, sets number of parallel commands.
+	mkdir ~/local
+	./configure --prefix=$HOME/local/node
+	make
+	make install
+	export PATH=$HOME/local/node/bin:$PATH
+
+Installing npm:
+	curl http://npmjs.org/install.sh | sh
+
+Dependencies:
+I have reworked the way we handle dependencies.  There is now a package.json file in the root of the website.  I have moved all of the actual server code to the lib folder.  This seems to be how other people are organizing their code.
+
+The main benefit of this method is that we can enter dependencies into the package.json file and then run `npm bundle` to have to pull down local versions of the dependencies for our application to use.
+
+In theory, you just need to cd into the web directory and then perform npm update && npm bundle commands.
+
+node nventio.js &
