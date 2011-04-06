@@ -1,16 +1,22 @@
 # Create your views here.
-from threefficiency.models import User, Status, Role, Group, Membership
+from status.models import User, Status, Role, Group, Membership
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
-@login_required
+def status_detail(request, status_id):
+    status_details = Status.objects.get(id=status_id)
+    response = TemplateResponse(request, 'status_details.html', { 'status_details': status_details })
+    return response 
+
+
+#@login_required
 def index(request):
         response = TemplateResponse(request, 'index.html', {})
         return response
 
-@login_required
+#@login_required
 def status(request):
         user = request.user
         groups = Membership.objects.filter(user__id=user.id)

@@ -7,6 +7,7 @@ from django.conf.urls.defaults import patterns, include, url
 urlpatterns = patterns('',
 	(r'^$', 'status.views.index'),
   	(r'^status/$', 'status.views.status'),
+	(r'^status/(?P<status_id>\d+)/$', 'status.views.status_detail'),
   	(r'^accounts/login/$', 'django.contrib.auth.views.login'),
   	(r'^accounts/logout/$','django.contrib.auth.views.logout_then_login'),
     # Examples:
