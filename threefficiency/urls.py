@@ -10,6 +10,8 @@ urlpatterns = patterns('',
 	(r'^status/(?P<status_id>\d+)/$', 'status.views.status_detail'),
   	(r'^accounts/login/$', 'django.contrib.auth.views.login'),
   	(r'^accounts/logout/$','django.contrib.auth.views.logout_then_login'),
+	(r'^playground', 'status.views.playground'),
+	(r'^status/latest/(?P<format>\w+)/$', 'status.views.get_latest_status_by_user_tag'),
     # Examples:
     # url(r'^$', 'threefficiency.views.home', name='home'),
     # url(r'^threefficiency/', include('threefficiency.foo.urls')),

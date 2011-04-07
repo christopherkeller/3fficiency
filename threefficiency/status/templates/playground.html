@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block js %}
+<script>
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie != '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = jQuery.trim(cookies[i]);
+				if (cookie.substring(0, name.length + 1) == (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+
+	$(document).ready(function() {
+		$('html').ajaxSend(function(event, xhr, settings) {
+			if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+				xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+			}		
+		});
+
+		var input = $('textarea');
+		var startWatching = false;
+		var hashTag = "";
+		input.bind("keyup", function(event) {
+			var txt = input.val();
+			var currentChar = txt[txt.length -1];
+			if (startWatching) {
+				if (event.keyCode == 32) {
+					var hIx = txt.lastIndexOf('#');
+					var sIx = txt.lastIndexOf(' ');
+					hashTag = txt.substring(hIx + 1, sIx);
+					startWatching = false;
+					$.post('/status/latest/json/',{ hashTag: hashTag }, function(data) {
+						//console.log(data);
+						var last_status = $('#last_status');
+						last_status.append("<li>" + data[0].fields.completed_status + "</li>");
+						last_status.fadeIn('slow');
+					});
+				}
+			} else {
+				if (currentChar == '#') {
+					startWatching = true; 
+				}
+			}
+		});	
+	});
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div style="margin:20px;">
+<ul id="last_status" style="display:none; margin-bottom: 20px;">
+</ul>
+<div>
+	{% csrf_token %}
+	<textarea style="height: 50px; width: 400px"></textarea>
+</div>
+<div id="peer_status" style="display:none">
+Start filling in status for the current group for other peers.
+</div>
+</div>
+{% endblock %}
