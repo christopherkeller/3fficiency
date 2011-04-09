@@ -4,6 +4,9 @@ from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+import logging
+
+logger = logging.getLogger()
 
 def status_detail(request, status_id):
     status_details = Status.objects.get(id=status_id)
@@ -11,12 +14,18 @@ def status_detail(request, status_id):
     return response 
 
 
-#@login_required
+@login_required
 def index(request):
-        response = TemplateResponse(request, 'index.html', {})
+	groups = [] 
+	user_status = {}
+	membership = Membership.objects.filter(user__id=request.user.id)
+	for m in membership:
+		groups.append(Membership.objects.filter(group__id=m.group.id))
+
+        response = TemplateResponse(request, 'index.html', { 'membership': membership, 'groups': groups })
         return response
 
-#@login_required
+@login_required
 def status(request):
         user = request.user
         groups = Membership.objects.filter(user__id=user.id)

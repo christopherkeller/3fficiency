@@ -2,5 +2,30 @@
 
 {% load url from future %}
 {% block content %}
-Testing
+<strong>Groups {{ user.first_name }} {{ user.last_name }} is a member of</strong>:
+<!-- loop throug the groups 
+
+	Based on the roll you would only see your peers and members
+
+	Security:
+		"I did foo" - Jeff
+	NXT:
+		"I did foo too" - Jeff
+//-->
+<ul>
+{% for g in groups %}
+	<li>
+		{% for m in g %}
+		{% if forloop.first %}
+			<strong>{{ m.group.group_name }}</strong>
+		{% endif %}
+		<ul>
+			{% if user.id != m.user.id %}
+				<li>{{ m.user.first_name }} - "<em>{{ m.latest_status }}</em>"</li>
+			{% endif %}
+		</ul>
+		{% endfor %}
+	</li>
+{% endfor %}
+</ul>
 {% endblock %}

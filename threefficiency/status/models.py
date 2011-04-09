@@ -15,6 +15,7 @@ class User(models.Model):
   
   def __unicode__(self):
     return "%s %s (%s)" % (self.first_name, self.last_name, self.user_name)
+
 	
   class Meta:
 	db_table = 'user'
@@ -45,6 +46,9 @@ class Status(models.Model):
   completed_status = models.CharField(max_length=3000)
   predicted_status = models.CharField(max_length=3000)
 
+  def __unicode__(self):
+    return "%s %s" % (self.user, self.completed_status) 
+
   class Meta:
 	db_table = 'status'
   
@@ -58,6 +62,14 @@ class Membership(models.Model):
 
   class Meta:
 	db_table = 'membership'
+
+  def latest_status(self):
+	latest_status = ''
+	try:
+        	latest_status = Status.objects.filter(user__id=self.user.id).filter(group__id=self.group.id).order_by('date')[0].completed_status
+        except IndexError, exc:
+		latest_status = "No status given for this group yet"
+	return latest_status 
 
 class StatusForm(ModelForm):
         class Meta:

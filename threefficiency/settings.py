@@ -78,6 +78,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 	'/Users/rjgonza1/Projects/py27play/3fficiency/static',
+	'/Users/ryans/nventio/static'
 )
 
 # List of finder classes that know how to find static files in
@@ -152,6 +153,6 @@ LOGGING = {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
-        },
+        }
     }
 }
