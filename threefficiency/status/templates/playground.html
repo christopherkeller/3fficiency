@@ -3,10 +3,28 @@
 
 {% block css %}
 
+<style>
+
+#last_status { 
+	margin-bottom: 20px;
+}
+
+.status-text {
+	border: 1px solid #ccc;
+	padding: 3px;
+	margin-left: 20px; 
+	margin-right: 20px; 
+	width: 95%;
+}
+
+</style>
+
 {% endblock %}
 
 {% block js %}
 <script>
+
+
 	function getCookie(name) {
 		var cookieValue = null;
 		if (document.cookie && document.cookie != '') {
@@ -29,23 +47,26 @@
 			}		
 		});
 
-		var input = $('textarea');
+		var input = $('.status-text');
 		var startWatching = false;
 		var hashTag = "";
 		input.bind("keyup", function(event) {
 			var txt = input.val();
 			var currentChar = txt[txt.length -1];
+			console.log(event.keyCode);
 			if (startWatching) {
 				if (event.keyCode == 32) {
 					var hIx = txt.lastIndexOf('#');
 					var sIx = txt.lastIndexOf(' ');
 					hashTag = txt.substring(hIx + 1, sIx);
 					startWatching = false;
+					
+					//TODO: We probably want to cache people's last status in each group
+					//	in json so that showing them the status is instant.
 					$.post('/status/latest/json/',{ hashTag: hashTag }, function(data) {
-						//console.log(data);
-						var last_status = $('#last_status');
-						last_status.append("<li>" + data[0].fields.completed_status + "</li>");
-						last_status.fadeIn('slow');
+						var ls = $('#last_status');
+						ls.append("<li>" + data[0].fields.completed_status + "</li>");
+						ls.fadeIn('fast');
 					});
 				}
 			} else {
@@ -65,7 +86,7 @@
 </ul>
 <div>
 	{% csrf_token %}
-	<textarea style="height: 50px; width: 400px"></textarea>
+	<input type="textbox" class="status-text" placeholder="Enter your status">
 </div>
 <div id="peer_status" style="display:none">
 Start filling in status for the current group for other peers.
