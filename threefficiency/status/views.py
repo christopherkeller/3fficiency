@@ -7,7 +7,6 @@ from django.shortcuts import render_to_response
 from django.core import serializers
 from django.core.context_processors import csrf
 
-
 def status_detail(request, status_id):
     status_details = Status.objects.get(id=status_id)
     response = TemplateResponse(request, 'status_details.html', { 'status_details': status_details })
@@ -16,7 +15,14 @@ def status_detail(request, status_id):
 
 @login_required
 def index(request):
-	return render_to_response('index.html', {})
+	groups = [] 
+	user_status = {}
+	membership = Membership.objects.filter(user__id=request.user.id)
+	for m in membership:
+		groups.append(Membership.objects.filter(group__id=m.group.id))
+
+        response = TemplateResponse(request, 'index.html', { 'membership': membership, 'groups': groups })
+        return response
 
 @login_required
 def status(request):
