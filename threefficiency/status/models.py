@@ -66,7 +66,8 @@ class Membership(models.Model):
   def latest_status(self):
 	latest_status = ''
 	try:
-        	latest_status = Status.objects.filter(user__id=self.user.id).filter(group__id=self.group.id).order_by('date')[0].completed_status
+		status = Status.objects.filter(user__id=self.user.id).filter(group__id=self.group.id).order_by('date')[0]
+        	latest_status = "%s (%s)" %(status.completed_status, status.date)
         except IndexError, exc:
 		latest_status = "No status given for this group yet"
 	return latest_status 
