@@ -37,7 +37,7 @@
 				//      in json so that showing them the status is instant.
 				$.post('/status/latest/json/',{ hashTag: hashTag }, function(data) {
 					var ls = $('#last_status');
-					ls.append("<li>" + data[0].fields.completed_status + "</li>");
+					ls.append(data[0].fields.completed_status);
 					ls.fadeIn('fast');
 				});
 			}
@@ -87,7 +87,7 @@
 					//	in json so that showing them the status is instant.
 					$.post('/status/latest/json/',{ hashTag: hashTag }, function(data) {
 						var ls = $('#last_status');
-						ls.append("<li>" + data[0].fields.completed_status + "</li>");
+						ls.append("<ul><li>On " + data[0].fields.date + " you reported:</li><li>" + data[0].fields.completed_status + "</li></ul>");
 						ls.fadeIn('fast');
 					});
 				}
@@ -107,8 +107,8 @@
 	<div id="status_entry_container">
 		<input type="textbox" class="status-text" placeholder="Enter your status">
 	</div>
-	<ul id="last_status" style="display:none; margin-top: 20px; margin-bottom: 20px;">
-	</ul>
+	<div id="last_status" style="display:none; margin-bottom: 20px; margin-top: 20px; width: 40%;">
+	</div>
 </div>
 <div id="peer_status" style="display:none">
 Start filling in status for the current group for other peers.
