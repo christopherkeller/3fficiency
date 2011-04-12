@@ -1,4 +1,4 @@
-
+//Changed 4/11/11 @ 3:07PM
 
 Assumptions:
 I connected to ssh with -L3306:localhost:3306, to port forward to the database located on the host.
@@ -32,3 +32,8 @@ node nventio.js &
 
 Current Production URL:
 http://3fficiency.com:8000
+
+
+Updating the live site:
+cd threefficiency/
+./restart.sh

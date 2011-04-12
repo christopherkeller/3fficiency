@@ -2,7 +2,7 @@
 
 {% load url from future %}
 {% block content %}
-<strong>Groups {{ user.first_name }} {{ user.last_name }} is a member of</strong>:
+<strong>Groups you are member of</strong>:
 <!-- loop throug the groups 
 
 	Based on the roll you would only see your peers and members
@@ -21,7 +21,7 @@
 		{% endif %}
 		<ul>
 			{% if user.id != m.user.id %}
-				<li>{{ m.user.first_name }} - "<em>{{ m.latest_status }}</em>"</li>
+				<li>{{ m.user.first_name }} - <em>{{ m.latest_status }}</em></li>
 			{% endif %}
 		</ul>
 		{% endfor %}
