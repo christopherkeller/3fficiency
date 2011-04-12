@@ -23,7 +23,30 @@
 
 {% block js %}
 <script>
+	function handleStatusText(event) {
+		var txt = input.val();
+ 		var currentChar = txt[txt.length -1];
+ 		if (startWatching) {
+ 			if (event.keyCode == 32) {
+				var hIx = txt.lastIndexOf('#');
+				var sIx = txt.lastIndexOf(' ');
+				hashTag = txt.substring(hIx + 1, sIx);
+				startWatching = false;
 
+				//TODO: We probably want to cache people's last status in each group
+				//      in json so that showing them the status is instant.
+				$.post('/status/latest/json/',{ hashTag: hashTag }, function(data) {
+					var ls = $('#last_status');
+					ls.append("<li>" + data[0].fields.completed_status + "</li>");
+					ls.fadeIn('fast');
+				});
+			}
+		} else {
+			if (currentChar == '#') {
+				startWatching = true; 
+			}
+		}
+	}	
 
 	function getCookie(name) {
 		var cookieValue = null;
@@ -53,7 +76,6 @@
 		input.bind("keyup", function(event) {
 			var txt = input.val();
 			var currentChar = txt[txt.length -1];
-			console.log(event.keyCode);
 			if (startWatching) {
 				if (event.keyCode == 32) {
 					var hIx = txt.lastIndexOf('#');
@@ -80,16 +102,15 @@
 {% endblock %}
 
 {% block content %}
-
 <div style="margin:20px;">
-<ul id="last_status" style="display:none; margin-bottom: 20px;">
-</ul>
-<div>
 	{% csrf_token %}
-	<input type="textbox" class="status-text" placeholder="Enter your status">
+	<div id="status_entry_container">
+		<input type="textbox" class="status-text" placeholder="Enter your status">
+	</div>
+	<ul id="last_status" style="display:none; margin-top: 20px; margin-bottom: 20px;">
+	</ul>
 </div>
 <div id="peer_status" style="display:none">
 Start filling in status for the current group for other peers.
-</div>
 </div>
 {% endblock %}
