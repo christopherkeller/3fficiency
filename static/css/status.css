@@ -1,0 +1,11 @@
+
+/* homepage styles */
+.button {
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 150%;
+}
+
+#time_select, #display_status {
+	display: none;
+}

@@ -12,20 +12,19 @@
 	NXT:
 		"I did foo too" - Jeff
 //-->
-<ul>
-{% for g in groups %}
-	<li>
-		{% for m in g %}
-		{% if forloop.first %}
-			<strong>{{ m.group.group_name }}</strong>
-		{% endif %}
-		<ul>
-			{% if user.id != m.user.id %}
-				<li>{{ m.user.first_name }} - <em>{{ m.latest_status }}</em></li>
-			{% endif %}
-		</ul>
-		{% endfor %}
-	</li>
+<div id="group_buttons">
+{% for m in membership %}
+	<input class="button" type="button" name="{{m.group.group_name}}" id="{{m.group.group_name}}" value="{{m.group.group_name}}" />
 {% endfor %}
-</ul>
+</div>
+<div id="time_select">
+	<select name="time_frame" id="time_frame">
+		<option value="1">one day</option>
+		<option value="7">one week</option>
+		<option value="14">two weeks</option>
+		<option value="30">one month</option>
+	</select>
+</div>
+<div id="display_status">
+</div>
 {% endblock %}
