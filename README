@@ -32,3 +32,8 @@ node nventio.js &
 
 Current Production URL:
 http://3fficiency.com:8000
+
+
+Updating the live site:
+cd threefficiency/
+./restart.sh
