@@ -7,12 +7,13 @@ jQuery(document).ready(function() {
 	/* what gets fired off when a group button is pressed on the homepage (/) */
 	jQuery(".button").click(function() {
 		group = jQuery(this).val();
-		if (jQuery("#time_select").is(":visible")) {
-			var status_url = "/group/" + group + "/status/" + time_frame +  "/json/";
-			jQuery.get(status_url, function(data) {
-				build_status_list(data);
-			});
+		if (time_frame == '') {
+			time_frame = jQuery("#time_frame").val();
 		}
+		var status_url = "/group/" + group + "/status/" + time_frame +  "/json/";
+		jQuery.get(status_url, function(data) {
+			build_status_list(data);
+		});
 		jQuery("#time_select").slideDown('slow');	
 	});
 
