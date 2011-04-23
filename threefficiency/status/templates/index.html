@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 
 {% load url from future %}
 {% block content %}
-<strong>Groups you are member of</strong>:
+<h2>Your Groups</h2>
 <!-- loop throug the groups 
 
 	Based on the roll you would only see your peers and members
@@ -14,10 +14,11 @@
 //-->
 <div id="group_buttons">
 {% for m in membership %}
-	<input class="button" type="button" name="{{m.group.group_name}}" id="{{m.group.group_name}}" value="{{m.group.group_name}}" />
+	<a href="#" class="button" type="button" name="{{m.group.group_name}}" id="{{m.group.group_name}}">{{m.group.group_name}}</a>
 {% endfor %}
 </div>
 <div id="time_select">
+	<div id="slider"></div>
 	<select name="time_frame" id="time_frame">
 		<option value="1">one day</option>
 		<option value="7" selected>one week</option>

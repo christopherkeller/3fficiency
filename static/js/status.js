@@ -6,7 +6,8 @@ jQuery(document).ready(function() {
 
 	/* what gets fired off when a group button is pressed on the homepage (/) */
 	jQuery(".button").click(function() {
-		group = jQuery(this).val();
+		group = jQuery(this).attr("id");
+		console.log(group);
 		if (time_frame == '') {
 			time_frame = jQuery("#time_frame").val();
 		}
@@ -25,6 +26,11 @@ jQuery(document).ready(function() {
 			build_status_list(data);
 		});
 	});
+
+	$(function() {
+		$( "#slider" ).slider();
+	})
+
 });
 
 
