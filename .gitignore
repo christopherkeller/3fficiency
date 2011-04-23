@@ -5,3 +5,4 @@ tmp/*
 *.pyc
 dev_settings.py
 *.pid
+.idea/*
