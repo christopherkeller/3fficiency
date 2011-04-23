@@ -27,9 +27,7 @@ jQuery(document).ready(function() {
 		});
 	});
 
-	$(function() {
-		$( "#slider" ).slider();
-	})
+	$( "#slider" ).slider( {min: 1, max: 30});
 
 });
 
