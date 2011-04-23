@@ -3,7 +3,6 @@
 
 """
 edge.py
-# http://www.codeproject.com/KB/database/Modeling_DAGs_on_SQL_DBs.aspx
 
 Created by Christopher Keller on 2011-04-12.
 Copyright (c) 2011 3fficiency. All rights reserved.
