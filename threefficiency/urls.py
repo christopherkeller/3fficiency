@@ -12,6 +12,8 @@ urlpatterns = patterns('',
   	(r'^accounts/logout/$','django.contrib.auth.views.logout_then_login'),
 	(r'^playground', 'status.views.playground'),
 	(r'^status/latest/(?P<format>\w+)/$', 'status.views.get_latest_status_by_user_tag'),
+	(r'^user/(?P<user_name>\w+)/status/(?P<group_name>\w+)/(?P<format>\w+)/$', 'status.views.get_all_status_by_user'),
+	(r'^group/(?P<group_name>\w+)/status/(?P<time_frame>\w+)/(?P<format>\w+)/$', 'status.views.get_all_status_by_group'),
     # Examples:
     # url(r'^$', 'threefficiency.views.home', name='home'),
     # url(r'^threefficiency/', include('threefficiency.foo.urls')),
