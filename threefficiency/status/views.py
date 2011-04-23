@@ -101,5 +101,17 @@ def get_all_status_by_group(request, group_name, time_frame, format):
 			all_objects[user].append([s.date.strftime('%m/%d/%Y'), s.completed_status]) 
 			all_objects['keys'].append(user)
 
+	if len(all_objects['keys']) == 0:
+		for m in Membership.objects.filter(group__id=Group.objects.filter(group_name=group_name)[0].id):
+			user = "%s %s" % (m.user.first_name, m.user.last_name)
+
+			if user not in all_objects:
+				all_objects[user] = []
+				all_objects[user].append(['', 'no status for the given timeframe']) 
+				all_objects['keys'].append(user)
+			
+			
+		
+
 
 	return HttpResponse(json.dumps(all_objects), mimetype)
