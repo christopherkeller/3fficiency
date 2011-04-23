@@ -12,7 +12,7 @@ __author__  = [ 'Christopher Keller' ]
 __version__ = '0.1'
 
 DB_SCHEMA = 'nventio'
-DB_CONFIG = './db.cnf'
+DB_CONFIG = '../common/db.cnf'
 
 import MySQLdb
 import sys
