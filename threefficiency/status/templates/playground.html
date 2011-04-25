@@ -1,5 +1,8 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
+
+{% load static %}
 {% load url from future %}
+{% get_static_prefix as STATIC_PREFIX %}
 
 {% block css %}
 
@@ -9,12 +12,34 @@
 	margin-bottom: 20px;
 }
 
+.status-entry-container {
+	margin: 0 auto;
+	padding: 0 20px 0 20px;
+}
+
 .status-text {
-	border: 1px solid #ccc;
+	border: 1px solid #aaa;
+	display: block;
 	padding: 3px;
-	margin-left: 20px; 
-	margin-right: 20px; 
-	width: 95%;
+	margin-left: 0; 
+	margin-right: 0; 
+	width: 100%;
+}
+
+fieldset.status-container {
+	background-color: #600;
+	border: 0 solid #333;
+	color: #fff;
+	margin: 0;
+	padding: 3px;
+}
+
+fieldset.status-container legend {
+	background-color: #b66;
+	color: #fff;
+	margin: 0;
+	padding: 3px;
+	width: 100%;
 }
 
 </style>
@@ -22,7 +47,9 @@
 {% endblock %}
 
 {% block js %}
+<script src="{{ STATIC_PREFIX }}js/StringExtension.js"></script>
 <script>
+	/*
 	function handleStatusText(event) {
 		var txt = input.val();
  		var currentChar = txt[txt.length -1];
@@ -47,6 +74,7 @@
 			}
 		}
 	}	
+	*/
 
 	function getCookie(name) {
 		var cookieValue = null;
@@ -64,6 +92,7 @@
 	}
 
 	$(document).ready(function() {
+		
 		$('html').ajaxSend(function(event, xhr, settings) {
 			if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
 				xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
@@ -73,6 +102,7 @@
 		var input = $('.status-text');
 		var startWatching = false;
 		var hashTag = "";
+
 		input.bind("keyup", function(event) {
 			var txt = input.val();
 			var currentChar = txt[txt.length -1];
@@ -86,9 +116,10 @@
 					//TODO: We probably want to cache people's last status in each group
 					//	in json so that showing them the status is instant.
 					$.post('/status/latest/json/',{ hashTag: hashTag }, function(data) {
+						var li = "<fieldset class='status-container'><legend>{0} On {1} you reported:</legend>{2}</fieldset>";
 						var ls = $('#last_status');
-						ls.append("<ul><li>On " + data[0].fields.date + " you reported:</li><li>" + data[0].fields.completed_status + "</li></ul>");
-						ls.fadeIn('fast');
+						ls.append(li.format(hashTag, data[0].fields.date,data[0].fields.completed_status));
+						ls.fadeIn('slow');
 					});
 				}
 			} else {
@@ -102,9 +133,9 @@
 {% endblock %}
 
 {% block content %}
-<div style="margin:20px;">
+<div class="page"
 	{% csrf_token %}
-	<div id="status_entry_container">
+	<div id="status-entry-container">
 		<input type="textbox" class="status-text" placeholder="Enter your status">
 	</div>
 	<div id="last_status" style="display:none; margin-bottom: 20px; margin-top: 20px; width: 40%;">

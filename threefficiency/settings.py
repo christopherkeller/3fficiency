@@ -80,6 +80,7 @@ STATICFILES_DIRS = (
 	'/Users/rjgonza1/Projects/py27play/3fficiency/static',
 	'/var/webapps/3fficiency/static',
 	'/Users/ryans/nventio/static',
+	'/home/likwid/Projects/py27Play/3fficiency/static',
 )
 
 # List of finder classes that know how to find static files in
@@ -115,6 +116,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 	"/Users/ryans/nventio/threefficiency/status/templates",
+	"/home/likwid/Projects/py27Play/3fficiency/threefficiency/status/templates",
 )
 
 AUTHENTICATION_BACKENDS = (
