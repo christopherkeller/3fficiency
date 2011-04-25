@@ -6,11 +6,22 @@ jQuery(document).ready(function() {
 
 	/* what gets fired off when a group button is pressed on the homepage (/) */
 	jQuery(".button").click(function() {
+		// need to make the button active
+		jQuery(".button").removeClass("active");
+		jQuery(this).addClass("active");
 		group = jQuery(this).attr("id");
-		console.log(group);
 		if (time_frame == '') {
-			time_frame = jQuery("#time_frame").val();
+			time_frame = $( "#slider" ).slider( "option", "value" );
+			
 		}
+
+		if (time_frame == 0) {
+			time_frame = 1;
+			$("#time_display").html(" last " + time_frame + " day of " + group);
+		} else {
+			$("#time_display").html(" last " + time_frame + " days of " + group);
+		}
+	
 		var status_url = "/group/" + group + "/status/" + time_frame +  "/json/";
 		jQuery.get(status_url, function(data) {
 			build_status_list(data);
@@ -27,7 +38,19 @@ jQuery(document).ready(function() {
 		});
 	});
 
-	$( "#slider" ).slider( {min: 1, max: 30});
+	$( "#slider" ).slider( {min: 1, max: 30, step: 1,
+		slide: function(event, ui) {
+			if (ui.value == 1) {
+				$("#time_display").html(" last " + ui.value + " day of " + group);
+			} else {
+				$("#time_display").html(" last " + ui.value + " days of " + group);
+			}
+			var status_url = "/group/" + group + "/status/" + ui.value +  "/json/";
+			jQuery.get(status_url, function(data) {
+				build_status_list(data);
+			});
+		}
+	});
 
 });
 
