@@ -10,10 +10,7 @@ jQuery(document).ready(function() {
 		jQuery(".button").removeClass("active");
 		jQuery(this).addClass("active");
 		group = jQuery(this).attr("id");
-		if (time_frame == '') {
-			time_frame = $( "#slider" ).slider( "option", "value" );
-			
-		}
+		time_frame = $( "#slider" ).slider( "option", "value" );
 
 		if (time_frame == 0) {
 			time_frame = 1;
