@@ -20,10 +20,12 @@ def index(request):
 	groups = [] 
 	user_status = {}
 	membership = Membership.objects.filter(user__id=request.user.id)
+	# 1  is Administrator which is basically "what you own"
+	ownership = Membership.objects.filter(user__id=request.user.id).filter(role__id=1)
 	for m in membership:
 		groups.append(Membership.objects.filter(group__id=m.group.id))
 
-        response = TemplateResponse(request, 'index.html', { 'membership': membership, 'groups': groups })
+        response = TemplateResponse(request, 'index.html', { 'membership': membership, 'groups': groups, 'ownership': ownership })
         return response
 
 @login_required

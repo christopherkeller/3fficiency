@@ -2,7 +2,16 @@
 
 {% load url from future %}
 {% block content %}
-<h2>Your Groups</h2>
+
+{% if ownership|length > 0 %}
+<h2>Groups You Own</h2>
+<ul>
+{% for o in ownership %}
+	<li>{{ o.group.group_name }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+<h2>Your Groups Recent Status</h2>
 <!-- loop throug the groups 
 
 	Based on the roll you would only see your peers and members
