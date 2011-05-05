@@ -7,7 +7,7 @@
 <h2>Groups You Own</h2>
 <ul>
 {% for o in ownership %}
-	<li>{{ o.group.group_name }}</li>
+	<li>{{ o.start_vertex }}</li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -22,8 +22,8 @@
 		"I did foo too" - Jeff
 //-->
 <div id="group_buttons">
-{% for m in membership %}
-	<a href="#" class="button" type="button" name="{{m.group.group_name}}" id="{{m.group.group_name}}">{{m.group.group_name}}</a>
+{% for g in groups %}
+	<a href="#" class="button" type="button" name="{{g.end_vertex}}" id="{{g.end_vertex}}">{{g.end_vertex}}</a>
 {% endfor %}
 </div>
 <div id="time_select">

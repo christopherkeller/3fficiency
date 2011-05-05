@@ -20,6 +20,17 @@ class User(models.Model):
   class Meta:
 	db_table = 'user'
 
+class Graph(models.Model):
+  start_vertex = models.CharField(max_length=36)
+  end_vertex = models.CharField(max_length=36)
+  hops = models.FloatField()
+
+  def __unicode__(self):
+	return "%s %s" % (self.start_vertex, self.end_vertex)
+
+  class Meta:
+	db_table = 'graph'
+
 class Group(models.Model):
   group_name = models.CharField(max_length=26)
   is_public = models.BooleanField()

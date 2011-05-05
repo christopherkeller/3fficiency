@@ -1,4 +1,4 @@
-from status.models import User, Status, Role, Group, Membership
+from status.models import User, Status, Role, Group, Membership, Graph
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
@@ -17,15 +17,10 @@ def status_detail(request, status_id):
 
 @login_required
 def index(request):
-	groups = [] 
-	user_status = {}
-	membership = Membership.objects.filter(user__id=request.user.id)
-	# 1  is Administrator which is basically "what you own"
-	ownership = Membership.objects.filter(user__id=request.user.id).filter(role__id=1)
-	for m in membership:
-		groups.append(Membership.objects.filter(group__id=m.group.id))
+	ownership = Graph.objects.filter(end_vertex=request.user.user_name).filter(hops=0)
+	groups = Graph.objects.filter(start_vertex=request.user.user_name).filter(hops=0)
 
-        response = TemplateResponse(request, 'index.html', { 'membership': membership, 'groups': groups, 'ownership': ownership })
+        response = TemplateResponse(request, 'index.html', { 'groups': groups, 'ownership': ownership })
         return response
 
 @login_required
