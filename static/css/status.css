@@ -149,3 +149,10 @@ nav a:hover {
 	font-weight: bold;
 }
 
+/* for anyone the group/hastag owner needs to approve. It should only pop up when there are requests */
+#approve_requests {
+	right: 10px;	
+	margin-right: 20px;
+	position: absolute;
+	top: 5px;
+}

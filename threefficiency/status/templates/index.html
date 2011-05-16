@@ -2,6 +2,14 @@
 
 {% load url from future %}
 {% block content %}
+{% block js %}
+	<script language="javascript">
+		var user_name = "{{user.user_name}}";
+	</script>
+{% endblock %}
+
+<div id="approve_requests">
+</div>
 
 {% if ownership|length > 0 %}
 <h2>Groups You Own</h2>
@@ -11,7 +19,9 @@
 {% endfor %}
 </ul>
 {% endif %}
+{% if groups|length > 0 %}
 <h2>Your Groups Recent Status</h2>
+{% endif %}
 <!-- loop throug the groups 
 
 	Based on the roll you would only see your peers and members
@@ -23,7 +33,7 @@
 //-->
 <div id="group_buttons">
 {% for g in groups %}
-	<a href="#" class="button" type="button" name="{{g.end_vertex}}" id="{{g.end_vertex}}">{{g.end_vertex}}</a>
+	<a href="#" class="groups button" name="{{g.end_vertex}}" id="{{g.end_vertex}}">{{g.end_vertex}}</a>
 {% endfor %}
 </div>
 <div id="time_select">

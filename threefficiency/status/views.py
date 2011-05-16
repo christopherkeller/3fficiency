@@ -17,6 +17,7 @@ def status_detail(request, status_id):
 
 @login_required
 def index(request):
+	# need to set some cookies so we know who is logged in
 	ownership = Graph.objects.filter(end_vertex=request.user.user_name).filter(hops=0)
 	groups = Graph.objects.filter(start_vertex=request.user.user_name).filter(hops=0)
 
@@ -76,6 +77,53 @@ def get_all_status_by_user(request, user_name, group_name, format):
 		)) 
 
 	return HttpResponse(data, mimetype)
+
+# this should return a list of users that are writing status to a 
+# group that they are not members of. The owner of the group will need
+# to approve them for them to view the request
+# owner == the username of the owner of the group
+def new_requests(request, manager_username, format):
+	if format == 'json':
+		mimetype = 'application/json'
+
+	if request.method == 'GET':
+		users = [] 
+		# find all the groups that you are the owner of
+		for group in Graph.objects.filter(end_vertex=manager_username).filter(hops=0):
+
+		# find all the status for each of the groups that you are an owner of. Only need the usernames
+			group_id = Group.objects.filter(group_name=group.start_vertex)[0].id	
+			for status in Status.objects.filter(group__id=group_id):
+				# loop through all the users that reported status and then check to see if they are members
+				# whoever is not return them, they need to be approved or denided 
+				if len(Graph.objects.filter(start_vertex=status.user.user_name).filter(hops=0)) == 0:
+				# skip the owner, who is not a member of the group via the graph
+					if status.user.user_name != manager_username:
+						users.append({ 'first_name': status.user.first_name, 'last_name': status.user.last_name, 'id': status.user.id, 'user_name': status.user.user_name, 'group': group.start_vertex })
+
+		return HttpResponse(json.dumps(users), mimetype)
+	elif request.method == 'POST':
+		new_requests_post_data = request.POST
+		user_id = new_requests_post_data['user_id']
+		response = new_requests_post_data['response']
+		group = new_requests_post_data['group']
+		user = User.objects.filter(id=user_id)[0]
+		if response == 'approve':
+			# ok we approve this user 
+			new_member = Graph.objects.create(start_vertex=user.user_name, end_vertex=group, hops=0, source='3f')	
+			new_member_step2 = Graph.objects.create(start_vertex=user.user_name, end_vertex=manager_username, hops=1, source='3f')
+			# now add in edges
+			# this seems really lame, since rails can do this much cleaner
+			new_member.save	
+			new_member_step2.save	
+			Graph.objects.filter(id=new_member.id).update(entry_edge_id=new_member.id, direct_edge_id=new_member.id, exit_edge_id=new_member.id)
+			Graph.objects.filter(id=new_member_step2.id).update(entry_edge_id=new_member_step2.id, direct_edge_id=new_member_step2.id, exit_edge_id=new_member_step2.id)
+		
+		user_feedback = "%s %s has been %s" %(user.first_name, user.last_name, response)
+		response_data = { 'user_name': user.user_name, 'user_feedback': user_feedback }
+		return HttpResponse(json.dumps(response_data), mimetype)
+		
+	
 
 def get_all_status_by_group(request, group_name, time_frame, format):
 	if format == 'json':

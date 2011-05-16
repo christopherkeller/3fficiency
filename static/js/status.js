@@ -5,9 +5,9 @@ jQuery(document).ready(function() {
 	var time_frame = '';	
 
 	/* what gets fired off when a group button is pressed on the homepage (/) */
-	jQuery(".button").click(function() {
+	jQuery(".groups").click(function() {
 		// need to make the button active
-		jQuery(".button").removeClass("active");
+		jQuery(".groups").removeClass("active");
 		jQuery(this).addClass("active");
 		group = jQuery(this).attr("id");
 		time_frame = $( "#slider" ).slider( "option", "value" );
@@ -51,6 +51,52 @@ jQuery(document).ready(function() {
 
 });
 
+//fire this off on the page load
+var ar_timer = window.setTimeout(check_requests, 10000);
+
+// this will check every minute to see if there are any approvals to make 
+function check_requests() {
+
+	var requests_url = "/group/requests/" + user_name + "/json/";
+	var html = "";
+	jQuery.get(requests_url, function(data) {
+		var data_length = data.length;
+		if (data_length != 0) {
+			html += "<h2>Group Requests</h2>";
+			html += "<ul>";
+		}
+		for (var i = 0; i < data_length; i++) {
+			html += "<li id=\"" + data[i].user_name + "\" >" + data[i].first_name + " " + data[i].last_name + "&nbsp;&nbsp; (" + data[i].group + ")";
+			html += " &nbsp;&nbsp; ";
+			html += "<a href=\"#\" user_id=\"" + data[i].id + "\" response=\"approve\" group=\"" + data[i].group + "\" class=\"requests button\">approve</a>";
+			html += " or ";
+			html += "<a href=\"#\" user_id=\"" + data[i].id + "\" response=\"deny\" group=\"" + data[i].group + "\" class=\"requests button\">deny</a>";
+			html += "</li>"; 
+		}
+		html += "</ul>";
+		$("#approve_requests").html(html).fadeIn('slow');
+		jQuery(".requests").click(function() {
+			var response_url = "/group/requests/" + user_name + "/json/";
+			var response_data = {};
+			response_data['user_id'] = jQuery(this).attr("user_id");
+			response_data['response'] = jQuery(this).attr("response");
+			response_data['group'] = jQuery(this).attr("group");
+			jQuery.ajax({
+				type: "POST",
+				url: response_url,
+				data: response_data,
+				success: function(data) {
+					var request_selector = "#" + data.user_name;
+					jQuery(request_selector).html(data.user_feedback).fadeIn('slow');
+				}
+			});
+				
+		});
+	});
+	window.clearTimeout(ar_timer);
+	
+	ar_timer = window.setTimeout(check_requests, 20000);
+}
 
 /* data looks like this:
 	data.keys = Array of keys
@@ -81,3 +127,26 @@ function build_status_list(data) {
 
 
 }
+
+/* will jackin the csf data on each POST */
+$('html').ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        // Only send the token to relative URLs i.e. locally.
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
